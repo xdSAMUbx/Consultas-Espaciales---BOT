@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc/
+.env
+.git/
+.gitignore/
+datos_bot.pickle
+data/
+logs/
+initdb/
+README.md
