@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Any
-import yaml
+import yaml, os
 from dotenv import dotenv_values
 
 class Config:
@@ -16,14 +16,18 @@ class Config:
         self._load_env()
 
     def _load_env(self):
-        Config._env = dict(dotenv_values(self.env_path))
+        if self.env_path.exists():
+            Config._env = dict(dotenv_values(self.env_path))
+        else:
+            Config._env = {}
 
     def env(self, clave: str, default: str | None = None) -> str | None:
         if Config._env is None:
-            raise RuntimeError("No se cargó el .env todavía.")
-        valor = Config._env.get(clave, default)
-        if valor is None and default is None:
-            raise RuntimeError(f"Falta la variable '{clave}' en el .env")
+            Config._env = {}
+        # primero el .env (desarrollo local), luego el entorno (contenedor)
+        valor = Config._env.get(clave) or os.getenv(clave) or default
+        if valor is None:
+            raise RuntimeError(f"Falta la variable '{clave}'")
         return valor
 
     @classmethod
