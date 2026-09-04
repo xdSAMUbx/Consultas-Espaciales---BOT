@@ -39,15 +39,43 @@ Estaciones de metro.
 ### nyc_census_blocks
 
 Bloques censales con población.
-| columna | tipo | descripción |
-|---|---|---|
-| gid | integer | clave primaria |
-| blkid | varchar | identificador del bloque |
-| popn_total | float8 | población total |
-| popn_white | float8 | población blanca |
-| popn_black | float8 | población negra |
-| hood | varchar | barrio al que pertenece |
-| geom | MultiPolygon | límite del bloque |
+
+| columna    | tipo         | descripción                |
+| ---------- | ------------ | -------------------------- |
+| gid        | integer      | clave primaria             |
+| blkid      | varchar      | identificador del bloque   |
+| popn_total | float8       | población total            |
+| popn_white | float8       | población blanca           |
+| popn_black | float8       | población negra            |
+| popn_nativ | float8       | población nativa americana |
+| popn_asian | float8       | población asiática         |
+| popn_other | float8       | otra población             |
+| boroname   | varchar      | distrito                   |
+| geom       | MultiPolygon | límite del bloque          |
+
+**No tiene columna de barrio.** Para saber a qué barrio pertenece un bloque,
+hay que unirlo espacialmente con `nyc_neighborhoods`. Sí tiene `boroname`,
+así que para agregados por distrito no hace falta join espacial.
+
+**Pregunta:** ¿Cuál es la población del barrio West Village?
+
+```sql
+SELECT SUM(b.popn_total) AS poblacion
+FROM nyc_census_blocks b
+JOIN nyc_neighborhoods n ON ST_Intersects(b.geom, n.geom)
+WHERE n.name = 'West Village'
+LIMIT 100;
+```
+
+**Pregunta:** ¿Cuál es la población de cada distrito?
+
+```sql
+SELECT boroname, SUM(popn_total) AS poblacion
+FROM nyc_census_blocks
+GROUP BY boroname
+ORDER BY poblacion DESC
+LIMIT 100;
+```
 
 ### nyc_homicides
 
