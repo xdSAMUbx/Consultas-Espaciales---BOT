@@ -1,0 +1,39 @@
+saludo: |
+    Hola soy un bot de consultas espaciales. Antes de inicia
+    ¿Podrias darme tu nombre?
+
+bienvenida: |
+    Hola {nombre}. Puedes preguntarme sobre datos espaciales de Nueva York.
+
+    Por ejemplo:
+    • ¿Cuántos barrios hay en cada distrito?
+    • ¿Qué estaciones de metro hay en Brooklyn?
+    • ¿Cuál es la población del barrio West Village?
+    • ¿Qué calles pasan a menos de 200 metros de la estación Broad St?
+
+    Nota:
+    • Puedes escribir /sql para ver la consulta que generé.
+    • Puedes escribir /uso para ver cuántas te quedan.
+
+    Para salir: deja 5 minutos sin responder o escribe "No quiero continuar con la conversación".
+
+bienvenida_regreso: |
+    Hola de nuevo, {nombre}. ¿En qué te ayudo?
+
+    Escribe "Olvídame" si quieres que borre tus datos.
+
+inactividad:
+    aviso: "¿Sigues ahí? Si no respondes en el próximo minuto, cerraré la conversación,"
+    cierre: "Conversación cerrada por inactividad. Escribeme cuando quieras para retomar."
+
+errores:
+    generico: "Tuve un problema procesando eso. Intenta de nuevo en un momento."
+    consulta: "No pude resolver esa consulta. ¿Puedes reformularla?"
+    sin_resultados: "No encontré resultados para esa consulta"
+
+comandos:
+    cancelado: "Conversación cancelada. Escríbeme cuando quieras para retomar."
+    olvidado: "Listo, borré tus datos. La próxima vez te preguntaré tu nombre de nuevo."
+
+menu_principal:
+    titulo: "Elige una opción:"

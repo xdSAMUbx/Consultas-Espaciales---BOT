@@ -1,0 +1,40 @@
+services:
+    db:
+        image: docker.io/postgis/postgis:16-3.4
+        container_name: bot_db
+        env_file: .env
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        ports:
+            - "5440:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+            - ./data:/data:ro
+            - ./initdb:/docker-entrypoint-initdb.d:ro
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres -d bde"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+        networks: [bot-net]
+
+    app:
+        build: .
+        container_name: bot_app
+        env_file: .env
+        depends_on:
+            db:
+                condition: service_healthy
+        restart: unless-stopped
+        volumes:
+            - ./datos:/app/datos
+            - ./logs:/app/logs
+        networks: [bot-net]
+
+networks:
+    bot-net:
+
+volumes:
+    pgdata:
